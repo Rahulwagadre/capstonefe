@@ -4,10 +4,13 @@ import './index.css'
 import App from './App.jsx'
 import { store } from './store/store';
 import { Provider } from 'react-redux'
+import { UserProvider } from './context/UserContext.jsx';
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
-      <App />
+      <UserProvider>
+        <App />
+      </UserProvider>
     </Provider>
   </StrictMode>,
 )

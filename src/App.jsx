@@ -6,7 +6,7 @@ import { LayoutWithoutNavBar } from "./layouts/LayoutWithoutNavBar";
 import { LayoutWithNavBar } from "./layouts/LayoutWithNavBar";
 import { CartPage } from "./pages/CartPage";
 import { CheckoutPage } from "./pages/CheckoutPage";
-import { ProductDetailPage } from "./pages/ProductDetailPage";
+//import { ProductDetailPage } from "./pages/ProductDetailPage";
 import { CartNavbar } from "./features/navbar/CartNavbar";
 const router = createBrowserRouter([
   {
@@ -15,11 +15,11 @@ const router = createBrowserRouter([
     children: [{ 
       path: "/", 
       element: <HomePage /> 
-    },
-    {
-      path: "/product-detail", 
-      element: <ProductDetailPage /> 
     }],
+    // {
+    //   path: "/product-detail", 
+    //   element: <ProductDetailPage /> 
+    // }],
   },
   {
     path: "/checkout",

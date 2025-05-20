@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useUser } from '../../context/UserContext';
 import {
   Disclosure,
   DisclosureButton,
@@ -27,6 +28,7 @@ function classNames(...classes) {
 }
 
 export function Navbar() {
+  const { userId, isLoading, logout } = useUser();
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -51,7 +53,7 @@ export function Navbar() {
               <Link to="/">
               <img
                 alt="Your Company"
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=500"
+                src="https://www.shutterstock.com/shutterstock/photos/2314466127/display_1500/stock-vector-global-shopping-ecommerce-international-retail-futuristic-concept-with-shopping-cart-and-planet-2314466127.jpg"
                 className="h-8 w-auto"
               />
               </Link>
@@ -77,7 +79,8 @@ export function Navbar() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <Link to="/cart">
+            {
+              userId?<Link to="/cart">
               <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
               <button
                 type="button"
@@ -89,19 +92,22 @@ export function Navbar() {
                 0
               </span>
               </div>
-            </Link>
+            </Link>:""
+            }
 
             {/* Profile dropdown */}
-            <Menu as="div" className="relative ml-3">
+            {userId?
+              <Menu as="div" className="relative ml-3">
               <div>
-                <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                <MenuButton className="text-gray-300 hover:bg-gray-700 hover:text-white relative flex rounded-full bg-gray-800 text-base focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <img
+                  {/* <img
                     alt=""
                     src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
                     className="size-8 rounded-full"
-                  />
+                  /> */}
+                  {userId}
                 </MenuButton>
               </div>
               <MenuItems
@@ -116,44 +122,40 @@ export function Navbar() {
                     Your Profile
                   </a>
                 </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                  >
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                  >
-                    Sign out
-                  </a>
-                </MenuItem>
-                <Link to="signup">
-                  <MenuItem>
+
+                  <MenuItem onClick={(e)=>{
+                    e.preventDefault();
+                    logout();
+                  }}>
                     <a
                       href="#"
                       className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
                     >
-                      Sign up
+                      Log out
                     </a>
                   </MenuItem>
-                </Link>
-                <Link to="signup">
-                  <MenuItem>
-                    <a
-                      href="#"
-                      className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:outline-none"
-                    >
-                      Log in
-                    </a>
-                  </MenuItem>
-                </Link>
+
               </MenuItems>
-            </Menu>
+            </Menu>:<div><Link to="/login">
+                    <a href="#" className={classNames(
+                      "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "rounded-md px-3 py-2 text-base font-medium"
+                    )}
+                  >
+                    Login
+                    </a>
+                  </Link>
+                  <Link to="/signup">
+                    <a href="#" className={classNames(
+                      "text-gray-300 hover:bg-gray-700 hover:text-white",
+                      "rounded-md px-3 py-2 text-base font-medium"
+                    )}
+                  >
+                    register
+                    </a>
+                  </Link>
+                  </div>
+            }
           </div>
         </div>
       </div>

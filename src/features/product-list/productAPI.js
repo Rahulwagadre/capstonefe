@@ -2,8 +2,8 @@ import axios from 'axios';
 
 export function fetchAllProducts() {
     return new Promise(async(resolve) => {
-        const response = await axios("http://localhost:8080/products");
-        resolve({ data: response.data });
+        const response = await axios("http://localhost:9010/product");
+        resolve({ data: response.data.data });
     })
 }
 

@@ -3,6 +3,7 @@ import { ProductList } from "../product-list/ProductList";
 // import { fetchAllProductsByFiltersAsync } from '../product-list/productSlice';
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from "react";
+import { selectSelectedBrand, selectSelectedCategory, fetchProductsByBrandAsync, fetchProductsByCategoryAsync } from '../product-list/productSlice';
 import {
   Dialog,
   DialogBackdrop,
@@ -25,6 +26,7 @@ import {
 } from "@heroicons/react/20/solid";
 import { Pagination } from "../pagination/Pagination";
 import { selectAllBrands, selectAllCategories } from "../product-list/productSlice";
+import axios from "axios";
 
 const sortOptions = [
   { name: "Most Popular", href: "#", current: true },
@@ -39,23 +41,14 @@ const filters = [
     id: "brand",
     name: "Brand",
     options: [
-      { value: "white", label: "White", checked: false },
-      { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
-      { value: "brown", label: "Brown", checked: false },
-      { value: "green", label: "Green", checked: false },
-      { value: "purple", label: "Purple", checked: false },
+      
     ],
   },
   {
     id: "category",
     name: "Category",
     options: [
-      { value: "new-arrivals", label: "New Arrivals", checked: false },
-      { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
-      { value: "organization", label: "Organization", checked: false },
-      { value: "accessories", label: "Accessories", checked: false },
+      
     ],
   }
 ];
@@ -68,6 +61,7 @@ export function Filter() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const categories = useSelector(selectAllCategories);
   const brands = useSelector(selectAllBrands);
+
   const dispatch = useDispatch();
 
   filters[1].options = categories.filter((category => category !== null)).map((category) => {
@@ -86,8 +80,14 @@ export function Filter() {
     }
   })
 
-  function handleFilter(e, section, option) {
+  const handleFilter = async (e, section, option) => {
+
     console.log(e, section.id, option.value);
+    if (section.id === "brand") {
+      dispatch(fetchProductsByBrandAsync(option.value));
+    } else if (section.id === "category") {
+      dispatch(fetchProductsByCategoryAsync(option.value));
+    }
     
   }
 
@@ -163,7 +163,7 @@ export function Filter() {
                                     defaultValue={option.value}
                                     id={`filter-mobile-${section.id}-${optionIdx}`}
                                     name={`${section.id}[]`}
-                                    type="checkbox"
+                                    type="radio"
                                     className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                   />
                                   <svg
@@ -200,6 +200,7 @@ export function Filter() {
                         ))}
                       </div>
                     </DisclosurePanel>
+                    
                   </Disclosure>
                 ))}
               </form>
@@ -305,12 +306,12 @@ export function Filter() {
                             <div className="flex h-5 shrink-0 items-center">
                               <div className="group grid size-4 grid-cols-1">
                                 <input
-                                  onSelect={e=>handleFilter(e, section, option)}
-                                  defaultValue={option.value}
-                                  defaultChecked={option.checked}
-                                  id={`filter-${section.id}-${optionIdx}`}
-                                  name={`${section.id}[]`}
-                                  type="checkbox"
+                                  onChange={e=>handleFilter(e, section, option)}
+                                  // defaultValue={option.value}
+                                  // defaultChecked={option.checked}
+                                  id={optionIdx}
+                                  name="radio"
+                                  type="radio"
                                   className="col-start-1 row-start-1 appearance-none rounded border border-gray-300 bg-white checked:border-indigo-600 checked:bg-indigo-600 indeterminate:border-indigo-600 indeterminate:bg-indigo-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:border-gray-300 disabled:bg-gray-100 disabled:checked:bg-gray-100 forced-colors:appearance-auto"
                                 />
                                 <svg
@@ -336,7 +337,7 @@ export function Filter() {
                               </div>
                             </div>
                             <label
-                              htmlFor={`filter-${section.id}-${optionIdx}`}
+                              htmlFor={optionIdx}
                               className="text-sm text-gray-600"
                             >
                               {option.label}
@@ -357,7 +358,7 @@ export function Filter() {
             </div>
           </section>
 
-          <Pagination />
+          {/* <Pagination /> */}
 
         </main>
       </div>

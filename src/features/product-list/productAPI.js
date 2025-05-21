@@ -7,6 +7,20 @@ export function fetchAllProducts() {
     })
 }
 
+export function fetchProductsByBrand(brand) {
+    return new Promise(async (resolve) => {
+        const response = await axios.get("http://localhost:9010/product/by-brand/" + brand);
+        resolve({ data: response.data.data });
+    });
+}
+
+export function fetchProductsByCategory(category) {
+    return new Promise(async (resolve) => {
+        const response = await axios.get("http://localhost:9010/product/by-category/" + category);
+        resolve({ data: response.data.data });
+    });
+}
+
 export function fetchAllProductsByFilters(filter) {
     //filter:{"category": "beauty"}
     let queryString = ""

@@ -15,12 +15,12 @@ import {
   BellIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const navigation = [
-  { name: "Dashboard", href: "#", current: true },
-  { name: "Team", href: "#", current: false },
-  { name: "Projects", href: "#", current: false },
-  { name: "Calendar", href: "#", current: false },
+  { name: "Home", href: "#", current: false },
+  { name: "Products", href: "#", current: false },
 ];
 
 function classNames(...classes) {
@@ -29,6 +29,15 @@ function classNames(...classes) {
 
 export function Navbar() {
   const { userId, isLoading, logout } = useUser();
+  const [qty, setQty] = useState(0);
+  useEffect(()=>{
+    const fetchCart = async () => {
+      let cart = await axios.get(`http://localhost:9012/cart/${userId}`);
+      setQty(cart.data.totalQty);
+    }
+    fetchCart();
+  },[])
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -89,7 +98,7 @@ export function Navbar() {
                 <ShoppingCartIcon aria-hidden="true" className="size-6" />
               </button>
               <span className="opacity-100 inline-flex items-center justify-center rounded-full bg-gray-50 w-6 h-6 text-xs font-medium text-gray-600 ring-1 ring-inset ring-red-600/10 -mt-5 -ml-3">
-                0
+                {qty}
               </span>
               </div>
             </Link>:""
